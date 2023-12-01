@@ -1,6 +1,6 @@
 ﻿namespace MyEFCourse.Entities
 {
-    public class Comments
+    public class Comment
     {
         public string Message { get; set; }
         public string Author { get; set; }

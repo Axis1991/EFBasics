@@ -1,6 +1,6 @@
 ﻿namespace MyEFCourse.Entities
 {
-    public class Tags
+    public class Tag
     {
         public string Value { get; set; }
     }
