@@ -14,10 +14,9 @@ namespace MyEFCourse.Entities
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Address> Addresses { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //base.OnConfiguring(optionsBuilder); 
-            optionsBuilder.UseSqlServer("Data Source=DESKTOP-HRQN0Q1;Initial Catalog=EFCourseDB;Integrated Security=True;Trust Server Certificate=True");
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
