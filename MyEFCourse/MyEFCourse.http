@@ -1,0 +1,6 @@
+@MyEFCourse_HostAddress = http://localhost:5248
+
+GET {{MyEFCourse_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
