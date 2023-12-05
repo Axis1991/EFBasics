@@ -43,9 +43,22 @@ namespace MyEFCourse.Entities
                 .HasForeignKey(w => w.AuthorId);
 
                 eb.HasMany(w => w.Tags)
-                .WithMany(t => t.WorkItems);
+                .WithMany(t => t.WorkItems)
+                .UsingEntity<WorkItemTag>(
+                    w => w.HasOne(wit => wit.Tag)
+                    .WithMany()
+                    .HasForeignKey(wit => wit.TagId),
 
+                    w => w.HasOne(wit => wit.WorkItem)
+                    .WithMany()
+                    .HasForeignKey(wit => wit.WorkItemId),
 
+                    wit =>
+                    {
+                        wit.HasKey(x => new { x.TagId, x.WorkItemId });
+                        wit.Property(x => x.PublicationDate).HasDefaultValueSql("getutcdate()");
+                    });
+                    
 
             });
 
@@ -60,8 +73,7 @@ namespace MyEFCourse.Entities
                 .WithOne(u => u.User)
                 .HasForeignKey<Address>(a => a.UserId);
 
-            modelBuilder.Entity<WorkItemTag>()
-                .HasKey(c => new { c.TagId, c.WorkItemId });
+
         }
     }
 }
