@@ -13,14 +13,11 @@ namespace MyEFCourse.Entities
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Address> Addresses { get; set; }
+        public DbSet<State> States { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<WorkItem>()
-                .Property(x => x.State)
-                .IsRequired();
 
             modelBuilder.Entity<WorkItem>()
                 .Property(x => x.Area)
@@ -59,6 +56,8 @@ namespace MyEFCourse.Entities
                         wit.Property(x => x.PublicationDate).HasDefaultValueSql("getutcdate()");
                     });
                     
+                eb.HasOne(s => s.State)
+                .WithMany().HasForeignKey(s => s.StateId);
 
             });
 
@@ -72,6 +71,12 @@ namespace MyEFCourse.Entities
                 .HasOne(u => u.Address)
                 .WithOne(u => u.User)
                 .HasForeignKey<Address>(a => a.UserId);
+
+            modelBuilder.Entity<State>(eb =>
+            {
+                eb.Property(st => st.States)
+                .HasMaxLength(50).IsRequired();
+            });
 
 
         }

@@ -7,7 +7,6 @@ namespace MyEFCourse.Entities
     public class WorkItem
     {
         public int Id { get; set; }
-        public string State { get; set; }
         public string Area { get; set; }
         public string IterationPath { get; set; }
         public int Priority { get; set; }
@@ -24,6 +23,8 @@ namespace MyEFCourse.Entities
         public User Author { get; set; }
         public Guid AuthorId { get; set; }
         public List<Tag> Tags { get; set; }
+        public State State { get; set; }
+        public int StateId { get; set; }
         // public List<WorkItemTag> WorkItemTags { get; set; } = new List<WorkItemTag>();
     }
 }
