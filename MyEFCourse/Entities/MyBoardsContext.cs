@@ -53,6 +53,9 @@ namespace MyEFCourse.Entities
                 .HasOne(u => u.Address)
                 .WithOne(u => u.User)
                 .HasForeignKey<Address>(a => a.UserId);
+
+            modelBuilder.Entity<WorkItemTag>()
+                .HasKey(c => new { c.TagId, c.WorkItemId });
         }
     }
 }
