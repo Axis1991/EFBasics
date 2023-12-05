@@ -32,7 +32,7 @@ namespace MyEFCourse.Entities
                 eb.Property(wi => wi.Effort).HasColumnType("decimal(5,2)");
                 eb.Property(wi => wi.EndDate).HasPrecision(3);
                 eb.Property(wi => wi.Activity).HasMaxLength(200);
-                eb.Property(wi => wi.RemainingWork).HasPrecision(14,2);
+                eb.Property(wi => wi.RemainingWork).HasPrecision(14, 2);
                 eb.Property(wi => wi.Priority).HasDefaultValue(1);
 
             });
@@ -41,7 +41,12 @@ namespace MyEFCourse.Entities
                 {
                     eb.Property(x => x.DateCreated).HasDefaultValueSql("getutcdate()");
                     eb.Property(x => x.DateUpdated).ValueGeneratedOnUpdate();
-                 });
-             
+                });
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Address)
+                .WithOne(u => u.User)
+                .HasForeignKey<Address>(a => a.UserId);
+        }
     }
 }
