@@ -37,9 +37,15 @@ namespace MyEFCourse.Entities
                 eb.HasMany(w => w.Comments)
                   .WithOne(c => c.WorkItem)
                   .HasForeignKey(c => c.WorkItemId);
+
                 eb.HasOne(w => w.Author)
                 .WithMany(u => u.WorkItems)
                 .HasForeignKey(w => w.AuthorId);
+
+                eb.HasMany(w => w.Tags)
+                .WithMany(t => t.WorkItems);
+
+
 
             });
 
