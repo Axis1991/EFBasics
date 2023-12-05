@@ -34,6 +34,12 @@ namespace MyEFCourse.Entities
                 eb.Property(wi => wi.Activity).HasMaxLength(200);
                 eb.Property(wi => wi.RemainingWork).HasPrecision(14, 2);
                 eb.Property(wi => wi.Priority).HasDefaultValue(1);
+                eb.HasMany(w => w.Comments)
+                  .WithOne(c => c.WorkItem)
+                  .HasForeignKey(c => c.WorkItemId);
+                eb.HasOne(w => w.Author)
+                .WithMany(u => u.WorkItems)
+                .HasForeignKey(w => w.AuthorId);
 
             });
 

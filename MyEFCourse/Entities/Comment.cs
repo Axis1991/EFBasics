@@ -7,5 +7,7 @@
         public string Author { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? DateUpdated { get; set; }
+        public WorkItem WorkItem { get; set; }
+        public int WorkItemId { get; set; }
     }
 }
