@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyEFCourse.Entities
 {
-    public abstract class Epic : WorkItem
+    public class Epic : WorkItem
     {
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -19,7 +19,7 @@ namespace MyEFCourse.Entities
         public string Activity { get; set; }
         public double RemainingWork { get; set; }
     }
-    public class WorkItem
+    public abstract class WorkItem
     {
         public int Id { get; set; }
         public string Area { get; set; }
