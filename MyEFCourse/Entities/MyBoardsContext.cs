@@ -76,6 +76,8 @@ namespace MyEFCourse.Entities
                 {
                     eb.Property(x => x.DateCreated).HasDefaultValueSql("getutcdate()");
                     eb.Property(x => x.DateUpdated).ValueGeneratedOnUpdate();
+                    eb.HasOne(x => x.Author).WithMany( a=> a.Comments).HasForeignKey(x => x.AuthorId)
+                    .OnDelete(DeleteBehavior.NoAction);
                 });
 
             modelBuilder.Entity<User>()
