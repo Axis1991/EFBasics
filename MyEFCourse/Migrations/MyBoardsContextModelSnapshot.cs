@@ -102,6 +102,23 @@ namespace MyEFCourse.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("States");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            States = "To do"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            States = "Doing"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            States = "Done"
+                        });
                 });
 
             modelBuilder.Entity("MyEFCourse.Entities.Tag", b =>

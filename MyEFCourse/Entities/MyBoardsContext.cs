@@ -87,8 +87,12 @@ namespace MyEFCourse.Entities
 
             modelBuilder.Entity<State>(eb =>
             {
-                eb.Property(st => st.States)
-                .HasMaxLength(50).IsRequired();
+            eb.Property(st => st.States)
+            .HasMaxLength(50).IsRequired();
+            eb.HasData(
+                new State() { Id = 1, States = "To do" },
+                new State { Id = 2, States = "Doing"}, 
+                new State { Id = 3, States = "Done"});
             });
 
 
