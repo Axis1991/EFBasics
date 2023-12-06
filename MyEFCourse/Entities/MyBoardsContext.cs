@@ -95,6 +95,16 @@ namespace MyEFCourse.Entities
                 new State { Id = 3, States = "Done"});
             });
 
+            modelBuilder.Entity<Tag>(t =>
+            {
+              t.HasData(
+                    new Tag() { Id = 1, Value = "Web" },
+                    new Tag { Id = 2, Value = "UI" },
+                    new Tag { Id = 3, Value = "Desktop" },
+                    new Tag { Id = 4, Value = "API" },
+                    new Tag { Id = 5, Value = "Service" });
+            });
+
 
         }
     }
