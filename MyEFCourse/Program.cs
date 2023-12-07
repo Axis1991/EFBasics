@@ -62,10 +62,11 @@ if (!users.Any())
 }
 
 // Example endpoiny query
-app.MapGet("data", (MyBoardsContext db) =>
+app.MapGet("data", async (MyBoardsContext db) =>
     {
-        var toDoWI = db.WorkItems.Where(w => w.StateId == 1).ToList();
-        return new { toDoWI };
+        var ImpWorkItems = await db
+        .WorkItems.Where(wi => wi.Priority < 2).ToListAsync();
+        return new {  ImpWorkItems };
     });
 app.Run();
 
