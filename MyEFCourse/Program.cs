@@ -64,10 +64,11 @@ if (!users.Any())
 // Example endpoiny query
 app.MapGet("data", async (MyBoardsContext db) =>
     {
-        var new5comments = db.Comments
-        .OrderByDescending(c => c.DateCreated)
-        .Take(5).ToListAsync();
-        return new5comments;
+        var statesCount = await db.WorkItems
+        .GroupBy (x => x.StateId)
+        .Select(g => new { stateId = g.Key, count = g.Count() }).ToListAsync();
+
+        return statesCount;
     });
 app.Run();
 
