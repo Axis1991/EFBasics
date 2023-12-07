@@ -72,12 +72,13 @@ if (!users.Any())
 // Example endpoiny query
 app.MapDelete("data", async (MyBoardsContext db) =>
     {
-        var workitemTags = await db.WorkItemTags.Where(c => c.WorkItemId == 1).ToListAsync();
-        db.WorkItemTags.RemoveRange(workitemTags);
+        var user = await db.Users
+         .FirstAsync(u => u.Id == Guid.Parse("USER ID HERE 224099u453984"));
 
-        var workItem = await db.WorkItems.FirstAsync(c => c.Id == 2);
-        db.RemoveRange(workitemTags);
-
+        var userComments = db.Comments.Where(c => c.AuthorId == user.Id).ToList();
+        db.Remove(userComments);
+        await db.SaveChangesAsync();
+        db.Users.Remove(user);
         await db.SaveChangesAsync();
     });
 app.Run();
