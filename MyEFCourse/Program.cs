@@ -72,8 +72,10 @@ if (!users.Any())
 // Example endpoiny query
 app.MapPost("data", async (MyBoardsContext db) =>
     {
-        var user = await db.Users.FirstAsync(u => u.Id == Guid.Parse("1ECC80FA-8CA2-4291-AC61-08DBF68C0831"));
-        var userComments = await db.Comments.Where(c => c.AuthorId == user.Id).ToListAsync();
+        var user = await db.Users
+        .Include(u => u.Comments)
+        .FirstAsync(u => u.Id == Guid.Parse("1ECC80FA-8CA2-4291-AC61-08DBF68C0831"));
+        // var userComments = await db.Comments.Where(c => c.AuthorId == user.Id).ToListAsync();
 
 
         return user;
