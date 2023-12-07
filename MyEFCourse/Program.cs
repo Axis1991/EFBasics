@@ -62,15 +62,15 @@ if (!users.Any())
 }
 
 // Example endpoiny query
-app.MapPost("update", async (MyBoardsContext db) =>
+app.MapPost("create", async (MyBoardsContext db) =>
     {
-        Epic epic = await db.Epics.FirstAsync(epic => epic.Id == 1);
-        var rejectedState = await db.States.FirstAsync(s => s.States == "Rejected");
-
-        epic.State = rejectedState;
-
+        Tag tag = new Tag()
+        {
+            Value = "BRooo",
+        };
+        // await db.AddAsync(tag);
+        await db.Tags.AddAsync(tag);
         await db.SaveChangesAsync();
-        return epic;
     });
 app.Run();
 
