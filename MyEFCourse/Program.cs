@@ -64,9 +64,10 @@ if (!users.Any())
 // Example endpoiny query
 app.MapGet("data", async (MyBoardsContext db) =>
     {
-        var ImpWorkItems = await db
-        .WorkItems.Where(wi => wi.Priority < 2).ToListAsync();
-        return new {  ImpWorkItems };
+        var new5comments = db.Comments
+        .OrderByDescending(c => c.DateCreated)
+        .Take(5).ToListAsync();
+        return new5comments;
     });
 app.Run();
 
