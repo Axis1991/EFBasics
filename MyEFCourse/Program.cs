@@ -73,11 +73,10 @@ if (!users.Any())
 app.MapDelete("data", async (MyBoardsContext db) =>
     {
         var user = await db.Users
-         .FirstAsync(u => u.Id == Guid.Parse("USER ID HERE 224099u453984"));
+        .Include(u => u.Comments)
+        .FirstAsync(u => u.Id == Guid.Parse("USER ID HERE 224099u453984"));
 
-        var userComments = db.Comments.Where(c => c.AuthorId == user.Id).ToList();
-        db.Remove(userComments);
-        await db.SaveChangesAsync();
+   
         db.Users.Remove(user);
         await db.SaveChangesAsync();
     });
