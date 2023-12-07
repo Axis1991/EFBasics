@@ -73,7 +73,8 @@ if (!users.Any())
 app.MapPost("data", async (MyBoardsContext db) =>
     {
         var user = await db.Users
-        .Include(u => u.Comments)
+        .Include(u => u.Comments).ThenInclude(c => c.WorkItem)
+        .Include(u => u.Address)
         .FirstAsync(u => u.Id == Guid.Parse("1ECC80FA-8CA2-4291-AC61-08DBF68C0831"));
         // var userComments = await db.Comments.Where(c => c.AuthorId == user.Id).ToListAsync();
 
