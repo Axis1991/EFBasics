@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyEFCourse.Entities;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
+
 builder.Services.AddDbContext<MyBoardsContext>
     (option => option.UseSqlServer(builder.Configuration.GetConnectionString("MyBoardsConnStr"))
     );
@@ -63,26 +70,11 @@ if (!users.Any())
 }
 
 // Example endpoiny query
-app.MapPost("create", async (MyBoardsContext db) =>
+app.MapPost("data", async (MyBoardsContext db) =>
     {
-        var address = new Address()
-        {
-            Id = Guid.Parse("2A0EE1B3-39FD-48E3-DF17-08DF68C2368"),
-            City = "Kraków",
-            Country = "Poland",
-            Street = "Sleek"
-        };
+        var user = await db.Users.FirstAsync(u => u.Id == Guid.Parse("1ECC80FA-8CA2-4291-AC61-08DBF68C0831"));
+        var userComments = await db.Comments.Where(c => c.AuthorId == user.Id).ToListAsync();
 
-        var user = new User()
-        {
-            Email = "user@test.ru",
-            FirstName = "Adam",
-            LastName = "Sandler",
-            Address = address
-        };
-
-        db.Users.Add(user);
-        await db.SaveChangesAsync();
 
         return user;
     });
