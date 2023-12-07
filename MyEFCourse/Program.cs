@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using MyEFCourse.Entities;
 
@@ -59,5 +60,12 @@ if (!users.Any())
     dbContext.Users.AddRange(ExUser1, ExUser2);
     dbContext.SaveChanges();
 }
+
+// Example endpoiny query
+app.MapGet("data", (MyBoardsContext db) =>
+    {
+        var tags = db.Tags.ToList();
+        return tags;
+    });
 app.Run();
 
