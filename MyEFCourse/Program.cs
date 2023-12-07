@@ -64,13 +64,13 @@ if (!users.Any())
 // Example endpoiny query
 app.MapPost("update", async (MyBoardsContext db) =>
     {
-        User userupdate = await db.Users.FirstAsync( userupdate => userupdate.FirstName == "Gee");
+        Epic epic = await db.Epics.FirstAsync(epic => epic.Id == 1);
+        var rejectedState = await db.States.FirstAsync(s => s.States == "Rejected");
 
-        userupdate.LastName = "UpdatedLastName";
+        epic.State = rejectedState;
 
         await db.SaveChangesAsync();
-
-        return userupdate;
+        return epic;
     });
 app.Run();
 
