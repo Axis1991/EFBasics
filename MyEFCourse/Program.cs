@@ -62,13 +62,11 @@ if (!users.Any())
 }
 
 // Example endpoiny query
-app.MapGet("data", async (MyBoardsContext db) =>
+app.MapPost("update", async (MyBoardsContext db) =>
     {
-        var statesCount = await db.WorkItems
-        .GroupBy (x => x.StateId)
-        .Select(g => new { stateId = g.Key, count = g.Count() }).ToListAsync();
+        User userupdate = await db.Users.FirstAsync( userupdate => userupdate.FirstName == "Gee");
 
-        return statesCount;
+        userupdate.LastName = "UpdatedLastName";
     });
 app.Run();
 
