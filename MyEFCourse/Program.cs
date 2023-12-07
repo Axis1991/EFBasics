@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyEFCourse.Entities;
 
@@ -64,13 +65,26 @@ if (!users.Any())
 // Example endpoiny query
 app.MapPost("create", async (MyBoardsContext db) =>
     {
-        Tag tag = new Tag()
+        var address = new Address()
         {
-            Value = "BRooo",
+            Id = Guid.Parse("2A0EE1B3-39FD-48E3-DF17-08DF68C2368"),
+            City = "Kraków",
+            Country = "Poland",
+            Street = "Sleek"
         };
-        // await db.AddAsync(tag);
-        await db.Tags.AddAsync(tag);
+
+        var user = new User()
+        {
+            Email = "user@test.ru",
+            FirstName = "Adam",
+            LastName = "Sandler",
+            Address = address
+        };
+
+        db.Users.Add(user);
         await db.SaveChangesAsync();
+
+        return user;
     });
 app.Run();
 
