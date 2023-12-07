@@ -64,9 +64,8 @@ if (!users.Any())
 // Example endpoiny query
 app.MapGet("data", (MyBoardsContext db) =>
     {
-        var state = db.States.First();
-        var user = db.Users.First(u => u.FirstName == "Gee");
-        return new {state, user};
+        var toDoWI = db.WorkItems.Where(w => w.StateId == 1).ToList();
+        return new { toDoWI };
     });
 app.Run();
 
