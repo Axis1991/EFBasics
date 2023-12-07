@@ -70,16 +70,15 @@ if (!users.Any())
 }
 
 // Example endpoiny query
-app.MapPost("data", async (MyBoardsContext db) =>
+app.MapDelete("data", async (MyBoardsContext db) =>
     {
-        var user = await db.Users
-        .Include(u => u.Comments).ThenInclude(c => c.WorkItem)
-        .Include(u => u.Address)
-        .FirstAsync(u => u.Id == Guid.Parse("1ECC80FA-8CA2-4291-AC61-08DBF68C0831"));
-        // var userComments = await db.Comments.Where(c => c.AuthorId == user.Id).ToListAsync();
+        var workitemTags = await db.WorkItemTags.Where(c => c.WorkItemId == 1).ToListAsync();
+        db.WorkItemTags.RemoveRange(workitemTags);
 
+        var workItem = await db.WorkItems.FirstAsync(c => c.Id == 2);
+        db.RemoveRange(workitemTags);
 
-        return user;
+        await db.SaveChangesAsync();
     });
 app.Run();
 
