@@ -67,6 +67,10 @@ app.MapPost("update", async (MyBoardsContext db) =>
         User userupdate = await db.Users.FirstAsync( userupdate => userupdate.FirstName == "Gee");
 
         userupdate.LastName = "UpdatedLastName";
+
+        await db.SaveChangesAsync();
+
+        return userupdate;
     });
 app.Run();
 
