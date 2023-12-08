@@ -6,6 +6,7 @@ using MyEFCourse.Entities;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks.Dataflow;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,8 +19,10 @@ builder.Services.Configure<JsonOptions>(options =>
 });
 
 builder.Services.AddDbContext<MyBoardsContext>
-    (option => option.UseSqlServer(builder.Configuration.GetConnectionString("MyBoardsConnStr"))
-    );
+    (option => option
+    .UseSqlServer(builder.Configuration.GetConnectionString("MyBoardsConnStr"))
+    .UseLazyLoadingProxies()
+    ) ;
 
 var app = builder.Build();
 
@@ -71,10 +74,20 @@ if (!users.Any())
 }
 
 // Example endpoiny query
-app.MapDelete("data", async (MyBoardsContext db) =>
+app.MapGet("data", async (MyBoardsContext db) =>
     {
-        var topAuthors = db.Addresses.Where(a => a.Coordinate.Latitude > 10);
-     return topAuthors;
+    var withAddress = true;
+    var user = db.Users
+    .First(u => u.Id == Guid.Parse("1ECC80FA-8CA2-4291-AC61-08DBF68C0831"));
+        if (withAddress)
+        {
+            var result = new { FirstName = user.FirstName, Address = $"{user.Address.Street} {user.Address.City}" };
+            return result;
+        }
+
+        return new { FirstName = user.FirstName, Address = "-" };
+
+        // Added MS EntityFramework Proxies
     });
 app.Run();
 
