@@ -83,6 +83,9 @@ app.MapDelete("data", async (MyBoardsContext db) =>
         HAVING COUNT (*) > {minWorkItemNumber}")
         .ToList();
 
+        db.Database.ExecuteSqlRaw(@" UPDATE Comms SET UpdatedDate = GETDATE()
+        WHERE AuthorID = 'some-crazy-number-23464564545");
+
         return states;
     });
 app.Run();
