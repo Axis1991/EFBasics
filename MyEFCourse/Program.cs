@@ -73,13 +73,14 @@ if (!users.Any())
 // Example endpoiny query
 app.MapDelete("data", async (MyBoardsContext db) =>
     {
+        var minWorkItemNumber = "4";
         var states = db.States
-        .FromSqlRaw(@"
+        .FromSqlInterpolated($@"
         SELECT ss.Id, ss.Value
         FROM States ss
         JOIN WorkItems wi on wi.StateId = ss.Id
         GROUP BY wis.Id, wis.Value
-        HAVING COUNT (*) > 4");
+        HAVING COUNT (*) > { minWorkItemNumber}");
         
 
         await db.SaveChangesAsync();
