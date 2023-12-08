@@ -184,6 +184,19 @@ namespace MyEFCourse.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("MyEFCourse.Entities.Viewmodels.TopBoy", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WorkItemsCreated")
+                        .HasColumnType("int");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("View_TopBoys", (string)null);
+                });
+
             modelBuilder.Entity("MyEFCourse.Entities.WorkItem", b =>
                 {
                     b.Property<int>("Id")
@@ -303,7 +316,7 @@ namespace MyEFCourse.Migrations
                     b.HasOne("MyEFCourse.Entities.User", "Author")
                         .WithMany("Comments")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("MyEFCourse.Entities.WorkItem", "WorkItem")

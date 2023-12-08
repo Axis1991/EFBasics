@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MyEFCourse.Entities.Viewmodels;
+using System.Net.Http.Headers;
 
 namespace MyEFCourse.Entities
 {
@@ -17,6 +19,7 @@ namespace MyEFCourse.Entities
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<State> States { get; set; }
+        public DbSet<TopBoy> TopBoysView { get; set; }
 
         public DbSet<WorkItemTag> WorkItemTag { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -106,7 +109,12 @@ namespace MyEFCourse.Entities
                     new Tag { Id = 5, Value = "Service" });
             });
 
-
+            modelBuilder.Entity<TopBoy>(eb =>
+                {
+                    eb.ToView("View_TopBoys");
+                    eb.HasNoKey();
+                });
+    
         }
     }
 }
