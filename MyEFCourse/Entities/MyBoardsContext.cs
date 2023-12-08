@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MyEFCourse.Entities.Config;
 using MyEFCourse.Entities.Viewmodels;
 using System.Net.Http.Headers;
 
@@ -24,7 +25,16 @@ namespace MyEFCourse.Entities
         public DbSet<WorkItemTag> WorkItemTag { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //// one by one Option 
+            //new AddressConfig().Configure(modelBuilder.Entity<Address>());
+            //new StateConfig().Configure(modelBuilder.Entity<State>());
+            //new AddressConfig().Configure(modelBuilder.Entity<Address>());
+
+            //more optimal option
+            modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
+
             base.OnModelCreating(modelBuilder);
+
 
             modelBuilder.Entity<WorkItem>()
                 .Property(x => x.Area)
@@ -42,39 +52,6 @@ namespace MyEFCourse.Entities
                 task.Property(wi => wi.RemainingWork).HasPrecision(14, 2);
             });
 
-            modelBuilder.Entity<WorkItem>(eb =>
-            {
-                eb.Property(wi => wi.IterationPath).HasColumnName("My_Iteration_path");
-                eb.Property(wi => wi.Priority).HasDefaultValue(1);
-                eb.HasMany(w => w.Comments)
-                  .WithOne(c => c.WorkItem)
-                  .HasForeignKey(c => c.WorkItemId);
-
-                eb.HasOne(w => w.Author)
-                .WithMany(u => u.WorkItems)
-                .HasForeignKey(w => w.AuthorId);
-
-                eb.HasMany(w => w.Tags)
-                .WithMany(t => t.WorkItems)
-                .UsingEntity<WorkItemTag>(
-                    w => w.HasOne(wit => wit.Tag)
-                    .WithMany()
-                    .HasForeignKey(wit => wit.TagId),
-
-                    w => w.HasOne(wit => wit.WorkItem)
-                    .WithMany()
-                    .HasForeignKey(wit => wit.WorkItemId),
-
-                    wit =>
-                    {
-                        wit.HasKey(x => new { x.TagId, x.WorkItemId });
-                        wit.Property(x => x.PublicationDate).HasDefaultValueSql("getutcdate()");
-                    });
-                    
-                eb.HasOne(s => s.State)
-                .WithMany().HasForeignKey(s => s.StateId);
-
-            });
 
             modelBuilder.Entity<Comment>(eb =>
                 {
@@ -89,15 +66,7 @@ namespace MyEFCourse.Entities
                 .WithOne(u => u.User)
                 .HasForeignKey<Address>(a => a.UserId);
 
-            modelBuilder.Entity<State>(eb =>
-            {
-            eb.Property(st => st.States)
-            .HasMaxLength(50).IsRequired();
-            eb.HasData(
-                new State() { Id = 1, States = "To do" },
-                new State { Id = 2, States = "Doing"}, 
-                new State { Id = 3, States = "Done"});
-            });
+
 
             modelBuilder.Entity<Tag>(t =>
             {
@@ -115,13 +84,6 @@ namespace MyEFCourse.Entities
                     eb.HasNoKey();
                 });
 
-            modelBuilder.Entity<Address>()
-                .OwnsOne(a => a.Coordinate, ownd =>
-                {
-                    ownd.Property(c => c.Latitude).HasPrecision(18, 7);
-                    ownd.Property(c => c.Longitude).HasPrecision(18, 7);
-                });
-    
         }
     }
 }
