@@ -95,15 +95,15 @@ app.MapGet("data", async (MyBoardsContext db) =>
 app.MapGet("pagination", async (MyBoardsContext db) =>
 {
     // user input
-    var filter = "a";
-    string sortBy = "";
+    var filter = "r";
+    string sortBy = "FirstName";
     bool sortByDescending = false;
     int pageNumber = 1;
     int pageSize = 10;
     //
 
     var query = db.Users
-    .Where(u => filter == null || (u.Email.Contains(filter, StringComparison.OrdinalIgnoreCase) || u.FirstName.Contains(filter, StringComparison.OrdinalIgnoreCase)));
+    .Where(u => filter == null || u.Email.ToLower().Contains(filter.ToLower()) || u.FirstName.ToLower().Contains(filter.ToLower()));
 
     var totalCount = query.Count();
 
