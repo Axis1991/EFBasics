@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyEFCourse.Entities;
+using System.Linq.Expressions;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks.Dataflow;
 
@@ -21,7 +22,7 @@ builder.Services.Configure<JsonOptions>(options =>
 builder.Services.AddDbContext<MyBoardsContext>
     (option => option
     .UseSqlServer(builder.Configuration.GetConnectionString("MyBoardsConnStr"))
-    .UseLazyLoadingProxies()
+    //.UseLazyLoadingProxies()
     ) ;
 
 var app = builder.Build();
@@ -89,5 +90,40 @@ app.MapGet("data", async (MyBoardsContext db) =>
 
         // Added MS EntityFramework Proxies
     });
+
+app.MapGet("pagination", async (MyBoardsContext db) =>
+{
+    // user input
+    var filter = "a";
+    string sortBy = "";
+    bool sortByDescending = false;
+    int pageNumber = 1;
+    int pageSize = 10;
+    //
+
+    var query = db.Users
+    .Where(u => filter == null || (u.Email.Contains(filter, StringComparison.OrdinalIgnoreCase) || u.FirstName.Contains(filter, StringComparison.OrdinalIgnoreCase)));
+
+    if (sortBy != null)
+    {
+       
+        var columnsSelector = new Dictionary<string, Expression<Func<User, object>>>
+        {
+            { nameof(User.Email), user => user.Email },
+            { nameof(User.FirstName), user => user.FirstName },
+
+        };
+        Expression<Func<User, object>> sortByExpression = columnsSelector[sortBy];
+
+        query = sortByDescending
+         ? query.OrderByDescending(sortByExpression)
+         : query.OrderBy(sortByExpression);
+
+    }
+
+
+});
+
+
 app.Run();
 
