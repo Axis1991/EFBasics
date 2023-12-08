@@ -186,7 +186,7 @@ namespace MyEFCourse.Migrations
 
             modelBuilder.Entity("MyEFCourse.Entities.Viewmodels.TopBoy", b =>
                 {
-                    b.Property<string>("Name")
+                    b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("WorkItemsCreated")
@@ -307,6 +307,29 @@ namespace MyEFCourse.Migrations
                         .HasForeignKey("MyEFCourse.Entities.Address", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.OwnsOne("MyEFCourse.Entities.Coordinate", "Coordinate", b1 =>
+                        {
+                            b1.Property<Guid>("AddressId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<decimal?>("Latitude")
+                                .HasPrecision(18, 7)
+                                .HasColumnType("decimal(18,7)");
+
+                            b1.Property<decimal?>("Longitude")
+                                .HasPrecision(18, 7)
+                                .HasColumnType("decimal(18,7)");
+
+                            b1.HasKey("AddressId");
+
+                            b1.ToTable("Addresses");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AddressId");
+                        });
+
+                    b.Navigation("Coordinate");
 
                     b.Navigation("User");
                 });

@@ -73,8 +73,8 @@ if (!users.Any())
 // Example endpoiny query
 app.MapDelete("data", async (MyBoardsContext db) =>
     {
-     var topAuthors = db.TopBoysView.ToList();
-        return topAuthors;
+        var topAuthors = db.Addresses.Where(a => a.Coordinate.Latitude > 10);
+     return topAuthors;
     });
 app.Run();
 
