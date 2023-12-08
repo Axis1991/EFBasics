@@ -80,10 +80,10 @@ app.MapDelete("data", async (MyBoardsContext db) =>
         FROM States ss
         JOIN WorkItems wi on wi.StateId = ss.Id
         GROUP BY wis.Id, wis.Value
-        HAVING COUNT (*) > { minWorkItemNumber}");
-        
+        HAVING COUNT (*) > {minWorkItemNumber}")
+        .ToList();
 
-        await db.SaveChangesAsync();
+        return states;
     });
 app.Run();
 
