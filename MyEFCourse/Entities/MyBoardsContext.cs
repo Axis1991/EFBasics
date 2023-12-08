@@ -114,6 +114,13 @@ namespace MyEFCourse.Entities
                     eb.ToView("View_TopBoys");
                     eb.HasNoKey();
                 });
+
+            modelBuilder.Entity<Address>()
+                .OwnsOne(a => a.Coordinate, ownd =>
+                {
+                    ownd.Property(c => c.Latitude).HasPrecision(18, 7);
+                    ownd.Property(c => c.Longitude).HasPrecision(18, 7);
+                });
     
         }
     }

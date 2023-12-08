@@ -14,7 +14,7 @@ namespace MyEFCourse.Entities
         public Coordinate Coordinate { get; set; }
        
     }
-    [Owned]
+    // [Owned]
     public class Coordinate
     {
         public decimal? Longitude { get; set; }

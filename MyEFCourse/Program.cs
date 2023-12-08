@@ -73,20 +73,8 @@ if (!users.Any())
 // Example endpoiny query
 app.MapDelete("data", async (MyBoardsContext db) =>
     {
-        var minWorkItemNumber = "4";
-        var states = db.States
-        .FromSqlInterpolated($@"
-        SELECT ss.Id, ss.Value
-        FROM States ss
-        JOIN WorkItems wi on wi.StateId = ss.Id
-        GROUP BY wis.Id, wis.Value
-        HAVING COUNT (*) > {minWorkItemNumber}")
-        .ToList();
-
-        db.Database.ExecuteSqlRaw(@" UPDATE Comms SET UpdatedDate = GETDATE()
-        WHERE AuthorID = 'some-crazy-number-23464564545");
-
-        return states;
+     var topAuthors = db.TopBoysView.ToList();
+        return topAuthors;
     });
 app.Run();
 
