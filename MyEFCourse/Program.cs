@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MyEFCourse.DataTransferObject;
 using MyEFCourse.Entities;
 using System.Linq.Expressions;
 using System.Text.Json.Serialization;
@@ -104,6 +105,8 @@ app.MapGet("pagination", async (MyBoardsContext db) =>
     var query = db.Users
     .Where(u => filter == null || (u.Email.Contains(filter, StringComparison.OrdinalIgnoreCase) || u.FirstName.Contains(filter, StringComparison.OrdinalIgnoreCase)));
 
+    var totalCount = query.Count();
+
     if (sortBy != null)
     {
        
@@ -121,7 +124,12 @@ app.MapGet("pagination", async (MyBoardsContext db) =>
 
     }
 
+    var result = query.Skip(pageSize * (pageNumber - 1))
+    .Take(pageSize)
+    .ToList();
 
+    var pageResult = new PageResult<User>(result, totalCount, pageSize, pageNumber);
+    return pageResult;
 });
 
 
