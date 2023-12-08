@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyEFCourse.Entities;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks.Dataflow;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,12 +73,15 @@ if (!users.Any())
 // Example endpoiny query
 app.MapDelete("data", async (MyBoardsContext db) =>
     {
-        var user = await db.Users
-        .Include(u => u.Comments)
-        .FirstAsync(u => u.Id == Guid.Parse("USER ID HERE 224099u453984"));
+        var states = db.States
+        .FromSqlRaw(@"
+        SELECT ss.Id, ss.Value
+        FROM States ss
+        JOIN WorkItems wi on wi.StateId = ss.Id
+        GROUP BY wis.Id, wis.Value
+        HAVING COUNT (*) > 4");
+        
 
-   
-        db.Users.Remove(user);
         await db.SaveChangesAsync();
     });
 app.Run();
